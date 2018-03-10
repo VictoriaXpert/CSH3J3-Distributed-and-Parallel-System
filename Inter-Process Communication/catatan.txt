@@ -1,0 +1,18 @@
+1. Kode sudah ditest pada python 3.6
+2. print
+python 2.x:
+print "hello world"
+
+python 3.x:
+print ("hello world")
+
+3.encode() dan decode()
+pada jaringan, tipe data yang dikirim adalah byte
+
+pada python 2, tanpa encode() dan decode() kode bisa berjalan
+
+pada python 3, umumnya tipe data adalah string sehingga perlu diubah menjadi tipe byte jika dikirim melalui jaringan
+encode() dan decode() adalah metode untuk mengubah string menjadi byte
+
+saat dikirim: pesan.encode()
+saat diterima: pesan.decode()

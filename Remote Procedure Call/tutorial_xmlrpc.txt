@@ -1,0 +1,30 @@
+python 2.x menggunakan xmlrpclib
+python 3.x menggunakan xmlrpc
+
+XML-RPC is a simple, portable way to make remote procedure calls over HTTP.
+
+For example:
+We create a RPC server in localhost with port 8000. RPC server has "power" method. It takes two number (x and y) then calculate x^y (x power y).
+
+First we run RPC server.
+   
+Then as client we run this in python shell
+>>> import xmlrpc
+>>> s = xmlrpc.client.ServerProxy('http://localhost:8000')
+>>> print (s.power(2,5))
+32
+
+On the wire, XML-RPC values are encoded as XML.
+<methodCall>
+  <methodName>sample.sumAndDifference</methodName>
+  <params>
+    <param><value><int>5</int></value></param>
+    <param><value><int>3</int></value></param>
+  </params>
+</methodCall>
+
+http://www.tldp.org/HOWTO/XML-RPC-HOWTO/xmlrpc-howto-intro.html
+
+tugas
+buat upload dan download
+FSR windows sysvol RPC
