@@ -1,5 +1,8 @@
 import threading
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
+import urllib.error
+import urllib.parse
+
 
 class FetchUrls(threading.Thread):
 
@@ -9,15 +12,12 @@ class FetchUrls(threading.Thread):
 
     """
 
- 
-
     def __init__(self, urls, output):
-
         """
 
         Constructor.
 
- 
+
 
         @param urls list of urls to check
 
@@ -31,10 +31,7 @@ class FetchUrls(threading.Thread):
 
         self.output = output
 
-     
-
     def run(self):
-
         """
 
         Thread run method. Check URLs one by one.
@@ -61,7 +58,7 @@ class FetchUrls(threading.Thread):
 
             print('URL %s fetched by %s' % (url, self.name))
 
-        
+
 def main():
 
     # list 1 of urls to fetch
@@ -88,7 +85,6 @@ def main():
 
     f.close()
 
- 
 
 if __name__ == '__main__':
 
