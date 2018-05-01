@@ -2,8 +2,11 @@ from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 
 # Restrict to a particular path.
+
+
 class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)
+
 
 # Create server
 with SimpleXMLRPCServer(("192.168.56.1", 8000),
@@ -15,7 +18,7 @@ with SimpleXMLRPCServer(("192.168.56.1", 8000),
     server.register_function(pow)
 
     # Register a function under a different name
-    def adder_function(x,y):
+    def adder_function(x, y):
         return x + y
     server.register_function(adder_function, 'add')
 
@@ -36,17 +39,17 @@ with SimpleXMLRPCServer(("192.168.56.1", 8000),
 ##server = SimpleXMLRPCServer(address)
 ##
 ##
-##def multiply(a, b):
+# def multiply(a, b):
 ##    """return the product of two numbers"""
-##    return a * b
-##server.register_function(multiply)
+# return a * b
+# server.register_function(multiply)
 ##
 ##
-##if __name__ == '__main__':
-##    try:
+# if __name__ == '__main__':
+# try:
 ##        print ("Server running on %s:%s" % address)
-##        #print "Use Ctrl-C to Exit"
-##        server.serve_forever()
-##    except KeyboardInterrupt:
-##        server.server_close()
+# print "Use Ctrl-C to Exit"
+# server.serve_forever()
+# except KeyboardInterrupt:
+# server.server_close()
 ##        print ("Exiting")
