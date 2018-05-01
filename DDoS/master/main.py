@@ -10,6 +10,7 @@ message_format = {
 import xmlrpc.client
 import os
 import threading
+import socket
 
 
 class CommandRunner(threading.Thread):
@@ -79,11 +80,17 @@ class DDoSMaster:
             self.stopAttack()
 
 
+def getMasterIpAddress():
+    return socket.gethostbyname(socket.gethostname())
+
+
 if __name__ == '__main__':
+    this_ip = getMasterIpAddress()
     ddos = DDoSMaster()
     menu = 0
     while menu != 99:
         print("========== Welcome to DDoS Attack Application! ==========")
+        print("Your IP Address: ", this_ip)
         ddos.parseMenu(menu)
         print("1. Attack Target")
         print("2. View Botnet List")

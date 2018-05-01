@@ -28,6 +28,7 @@ def unregisterIP(ip_address):
 
 
 if __name__ == '__main__':
+    print(getMasterIpAddress())
     server = SimpleXMLRPCServer(
         (getMasterIpAddress(), 8000), requestHandler=RequestHandler, allow_none=True)
     server.register_introspection_functions()
