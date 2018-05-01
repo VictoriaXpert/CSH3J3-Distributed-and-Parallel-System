@@ -34,4 +34,4 @@ if __name__ == '__main__':
     print(s.system.listMethods())
     ip_address = socket.gethostbyname(socket.gethostname())
     s.register_ip(ip_address)
-    s.unregister_ip(ip_address)
+    
