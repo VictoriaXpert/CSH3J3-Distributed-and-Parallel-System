@@ -8,9 +8,7 @@ message_format = {
 """
 
 import xmlrpc.client
-
-
-botnet_list = []
+import os
 
 
 def distributeCommand(message):
@@ -30,8 +28,31 @@ def stopAttack():
 
 def viewBotnet():
     """view all list of available botnet"""
-    pass
+    ip_list = []
+    with open("botnet_list.txt", "r") as file:
+        ip_list = file.readlines()
+        ip_list = [x.strip() for x in ip_list]
+    return ip_list
 
 
+def parseMenu(menu):
+    if menu == "1":
+        pass
+    elif menu == "2":
+        botnet_list = viewBotnet()
+        print("*** BotNet List ***")
+        print(botnet_list)
+
+botnet_list = []
 if __name__ == '__main__':
-    pass
+    botnet_list = []
+    menu = 0
+    while menu != 99:
+        print("========== Welcome to DDoS Attack Application! ==========")
+        parseMenu(menu)        
+        print("1. Attack Target")
+        print("2. View Botnet List")
+        print("Select: ", end="")
+        menu = str(input())
+        os.system("cls")
+        
