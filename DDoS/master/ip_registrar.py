@@ -31,11 +31,11 @@ def unregisterIP(ip_address):
             file.write(ip+"\n")
 
 
-def getLogFromBotnet(ip_botnet, ip_target, status):
+def getLogFromBotnet(ip_botnet, ip_target, status, attack_type):
     with open("log.txt", "a") as file:
         if status == "success":
             file.write("("+strftime("%Y-%m-%d %H:%M:%S", gmtime()) + ") " +
-                       ip_botnet+" successfully attack " + ip_target + "\n")
+                       ip_botnet+" successfully attack " + ip_target + " with " + attack_type + "\n")
         elif status == "failed":
             file.write("("+strftime("%Y-%m-%d %H:%M:%S", gmtime()) +
                        ") " + ip_botnet+" failed to attack " + ip_target + "\n")

