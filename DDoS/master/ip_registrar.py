@@ -20,7 +20,10 @@ def unregisterIP(ip_address):
     with open("botnet_list.txt", "r") as file:
         ip_list = file.readlines()
         ip_list = [x.strip() for x in ip_list]
-        ip_list.remove(ip_address)
+        try:
+            ip_list.remove(ip_address)
+        except ValueError:
+            print("Already removed!")
 
     with open("botnet_list.txt", "w") as file:
         for ip in ip_list:
