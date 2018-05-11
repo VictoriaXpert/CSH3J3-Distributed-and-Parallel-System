@@ -1,2 +1,4 @@
-# CSH3J3-Distributed-and-Parallel-System
-Building an DDoS attack web for learning purpose.
+# Distributed and Parallel Systems Code
+
+Enjoy the code!
+My final task is DDoS Attack Program with ICMP and SYN Flooding Attack.
